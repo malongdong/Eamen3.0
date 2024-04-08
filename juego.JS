@@ -1,0 +1,80 @@
+// Declare variables outside of functions for global access
+const randomNumber = Math.floor(Math.random() * 100) + 1;
+const guesses = document.querySelector(".guesses");
+const lastResult = document.querySelector(".lastResult");
+const lowOrHi = document.querySelector(".lowOrHi");
+const guessSubmit = document.querySelector(".guessSubmit");
+const guessField = document.querySelector(".guessField");
+let guessCount = 1;
+let resetButton;
+
+function checkGuess() {
+  let userGuess = Number(guessField.value);
+
+  // Ensure valid input
+  if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+    lastResult.textContent = "Por favor, introduce un número entre 1 y 100.";
+    lastResult.style.backgroundColor = "red";
+    return;
+  }
+
+  if (guessCount === 1) {
+    guesses.textContent = "Intentos anteriores: ";
+  }
+
+  guesses.textContent += userGuess + " ";
+
+  if (userGuess === randomNumber) {
+    lastResult.textContent = "¡Felicidades! ¡Lo adivinaste!";
+    lastResult.style.backgroundColor = "green";
+    lowOrHi.textContent = "";
+    setGameOver();
+  } else if (guessCount === 10) {
+    lastResult.textContent = "¡¡¡Fin del juego!!!";
+    lowOrHi.textContent = "";
+    setGameOver();
+  } else {
+    lastResult.textContent = "¡Incorrecto!";
+    lastResult.style.backgroundColor = "red";
+    if (userGuess < randomNumber) {
+      lowOrHi.textContent = "¡El número es muy bajo!";
+    } else {
+      lowOrHi.textContent = "¡El número es muy grande!";
+    }
+  }
+
+  guessCount++;
+  guessField.value = "";
+  guessField.focus();
+}
+
+guessSubmit.addEventListener("click", checkGuess);
+
+function setGameOver() {
+  guessField.disabled = true;
+  guessSubmit.disabled = true;
+  resetButton = document.createElement("button");
+  resetButton.textContent = "Iniciar nuevo juego";
+  document.body.append(resetButton);
+  resetButton.addEventListener("click", resetGame);
+}
+
+function resetGame() {
+  guessCount = 1;
+
+  const resetParas = document.querySelectorAll(".resultParas p");
+  for (let i = 0; i < resetParas.length; i++) {
+    resetParas[i].textContent = "";
+  }
+
+  resetButton.parentNode.removeChild(resetButton);
+
+  guessField.disabled = false;
+  guessSubmit.disabled = false;
+  guessField.value = "";
+  guessField.focus();
+
+  lastResult.style.backgroundColor = "white";
+
+  randomNumber = Math.floor(Math.random() * 100) + 1;
+}
