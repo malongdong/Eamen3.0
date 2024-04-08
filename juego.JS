@@ -1,4 +1,3 @@
-// Declare variables outside of functions for global access
 const randomNumber = Math.floor(Math.random() * 100) + 1;
 const guesses = document.querySelector(".guesses");
 const lastResult = document.querySelector(".lastResult");
@@ -11,7 +10,7 @@ let resetButton;
 function checkGuess() {
   let userGuess = Number(guessField.value);
 
-  // Ensure valid input
+  // Validar el imput
   if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
     lastResult.textContent = "Por favor, introduce un número entre 1 y 100.";
     lastResult.style.backgroundColor = "red";
